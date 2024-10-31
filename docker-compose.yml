@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "8081:8081"  # b2bApitest - PHP 8.2
+      - "8080:8080"  # project1 - PHP 8.2
+      - "8001:8001"  # Project 1 - PHP 8.2
+    restart: unless-stopped
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./projects:/var/www/projects
+    depends_on:
+      - php82
+    networks:
+      - app-network
+
+  # PHP 8.2 Service
+  php82:
+    build:
+      context: ./php-versions/php82
+      dockerfile: Dockerfile
+    container_name: php82
+    restart: unless-stopped
+    volumes:
+      - ./projects:/var/www/projects
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:
