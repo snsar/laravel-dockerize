@@ -6,6 +6,7 @@ services:
     image: nginx:alpine
     container_name: nginx-proxy
     ports:
+      - "9608:9608" # admin_hcvn - PHP 8.1
       - "8686:8686" # erp - PHP 7.4
       - "8080:8080" # project1 - PHP 8.2
     restart: unless-stopped
@@ -39,6 +40,7 @@ services:
       - ./projects:/var/www/projects
     networks:
       - app-network
+
 networks:
   app-network:
     driver: bridge
