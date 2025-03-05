@@ -6,9 +6,15 @@ services:
     image: nginx:alpine
     container_name: nginx-proxy
     ports:
+      - "9998:9998"  # test-12 - PHP 8.2
+      - "9999:9999"  # designPatterns - PHP 8.2
+      - "8000:8000" # cb_portal_api - PHP 8.2
+      - "9193:9193" # retail_admin - PHP 5.6
       - "9608:9608" # admin_hcvn - PHP 8.1
       - "8686:8686" # erp - PHP 7.4
-      - "8080:8080" # project1 - PHP 8.2
+      - "8080:8080" # b2bApi - PHP 8.2
+      - "8704:8704" # cb_admin_api - PHP 8.2
+      - "8181:8181" # baokim_landing_page - PHP 8.2
     restart: unless-stopped
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
@@ -41,10 +47,32 @@ services:
     networks:
       - app-network
 
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 998326
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: snsar
+      MYSQL_PASSWORD: 998326
+      MYSQL_ROOT_HOST: "%"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --bind-address=0.0.0.0
+    restart: unless-stopped
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
   mysql_data:
-  redis_data:

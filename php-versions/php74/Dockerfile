@@ -1,26 +1,34 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.4-fpm
 
-# Install system dependencies, PHP extensions and setup user
-RUN apk add --no-cache \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpng-dev \
-    oniguruma-dev \
+    libonig-dev \
     libxml2-dev \
     zip \
-    unzip \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
-    && addgroup -g 1000 www \
-    && adduser -u 1000 -G www -h /home/www -s /bin/sh -D www
+    unzip
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+# Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u 1000 -d /home/www www
+RUN mkdir -p /home/www/.composer && \
+    chown -R www:www-data /home/www
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory  
+# Set working directory
 WORKDIR /var/www/projects
 
 # Copy existing application directory permissions
-COPY --chown=www:www . /var/www/projects
+COPY --chown=www:www-data . /var/www/projects
 
 # Change current user to www
 USER www
