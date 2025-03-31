@@ -1,3 +1,4 @@
 /projects/
 /nginx/conf.d/*
 init.sql
+.env

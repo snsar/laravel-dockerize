@@ -51,10 +51,10 @@ services:
     image: mysql:8.0
     container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 998326
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: snsar
-      MYSQL_PASSWORD: 998326
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_HOST: "%"
     ports:
       - "3306:3306"

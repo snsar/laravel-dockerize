@@ -7,6 +7,10 @@ This guide explains how to set up a PHP project with Nginx using Docker Compose.
 - Docker and Docker Compose installed on your system
 - Basic understanding of Docker concepts
 - Project source code
+- Cấp quyền excute script [create-nginx-conf.sh](./create-nginx-conf.sh)
+ ```bash
+  chmod +x create-nginx-conf.sh
+ ```
 
 ## Setup Instructions
 
